@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+patch -p1 < debian/tests-patches/use_system_estools 2>&1 || true
+
+dh_autoreconf 2>&1
+dh_auto_configure 2>&1
+make .config_error 2>&1
+make -C testsuite PROJECT_LIBDEPS=/usr/lib 2>&1
+
+make -C testsuite PROJECT_LIBDEPS=/usr/lib test
+
+patch -p1 -R < debian/tests-patches/use_system_estools

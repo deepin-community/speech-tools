@@ -1,0 +1,74 @@
+#!/usr/bin/make -f
+
+# export DH_VERBOSE=1
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+include /usr/share/dpkg/architecture.mk
+-include /usr/share/dpkg/buildtools.mk
+include /usr/share/dpkg/pkg-info.mk
+
+export DEB_VERSION_UPSTREAM
+export PROJECT_VERSION=$(DEB_VERSION_UPSTREAM)
+export PROJECT_MAJOR_VERSION=$(shell echo $(DEB_VERSION_UPSTREAM) | sed 's/^\([^\.]\+\.[^\.]\)\.[^\.]\+$$/\1/')
+
+ifeq ($(origin CC),default)
+CC := $(DEB_HOST_GNU_TYPE)-gcc
+endif
+ifeq ($(origin CXX),default)
+CXX := $(DEB_HOST_GNU_TYPE)-g++
+endif
+
+SBT := $(shell pwd)/debian/speech-tools
+
+S_SCRIPTS = raw_to_xgraph.prl make_wagon_desc.sh resynth.sh
+
+override_dh_auto_build-arch:
+	$(MAKE) CC='$(CC)' CXX='$(CXX) -fno-delete-null-pointer-checks'
+
+override_dh_auto_build-indep:
+	# Unfortunately the documentation is created by parsing the binaries that
+	# are build. As such we need a much of a full build for the documentation.
+	$(MAKE) CC='$(CC)' CXX='$(CXX) -fno-delete-null-pointer-checks'
+	cd doc && $(MAKE) doc
+
+override_dh_auto_test:
+	dh_auto_test --no-parallel
+
+override_dh_auto_clean:
+	-$(MAKE) clean NO_DEPEND=1 SYSTEM_TYPE=unknown_DebianGNULinux
+
+override_dh_clean:
+	find -name make.depend -print0 | xargs -0r $(RM)
+	find -name make.include -print0 | xargs -0r $(RM)
+	find bin/ \( -name SCCS -o -name RCS -o -name CVS \) -prune \
+	     -o -type f ! -name Makefile -print0 | xargs -0r $(RM)
+	dh_clean
+
+override_dh_install-arch:
+	dh_install
+	mkdir -p $(SBT)/usr/bin
+	(cd scripts && \
+		for i in $(S_SCRIPTS); do \
+			dest=`echo $$i | sed -e 's/\.\(prl\|sh\)$$//'`; \
+			sed -e 's,__PERL__,/usr/bin/perl,g' \
+				<$$i >$(SBT)/usr/bin/$$dest; \
+			chmod +x $(SBT)/usr/bin/$$dest; \
+		done)
+	# Handle the install of pm which is renamed simple-pitchmark separately.
+	(cd scripts && \
+			sed -e 's,__PERL__,/usr/bin/perl,g' \
+				<pm.prl >$(SBT)/usr/bin/simple-pitchmark; \
+			chmod +x $(SBT)/usr/bin/simple-pitchmark;)
+
+override_dh_fixperms-arch:
+	dh_fixperms
+	chmod +x debian/libestools-dev/usr/lib/speech_tools/config/rules/modules.sh
+	chmod +x debian/libestools-dev/usr/lib/speech_tools/config/system.sh
+
+override_dh_install-indep:
+	dh_install
+	dh_doxygen -p speech-tools-doc usr/share/doc/speech-tools-doc/doc/
+
+%:
+	dh $@

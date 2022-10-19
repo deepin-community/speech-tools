@@ -1,0 +1,146 @@
+This patch allows one to build speech tools honoring user provided
+CFLAGS, CXXFLAGS and LDFLAGS. This is required to have a hardened build
+without the obsolete hardening-wrapper package.
+
+The patch also fixes config/rules/test_make_rules.mak so the test binaries
+also respect LDFLAGS when being linked. This change fixes the Debian QA buildd
+check and has already been submitted upstream at
+https://github.com/festvox/speech_tools/pull/5/files
+
+Author: Sergio Oller <sergioller@gmail.com>
+Applied-Upstream: https://github.com/festvox/speech_tools/pull/10
+Last update: 2018-07-19
+--- a/configure.in
++++ b/configure.in
+@@ -33,6 +33,7 @@
+ AC_INIT(include/EST.h)
+ 
+ AC_CANONICAL_SYSTEM
++AC_PROG_CXX
+ AC_PROG_CC
+ if test "x$GCC" = "xyes"; then
+ 	CFLAGS="$CFLAGS -Wall"
+@@ -98,4 +99,5 @@
+                [OMP_DEFS="-DOMP_WAGON=1"])
+ AC_SUBST(OMP_DEFS)
+ 
+-AC_OUTPUT(config/config)
++AC_CONFIG_FILES([config/config config/user_flags.mak])
++AC_OUTPUT
+--- /dev/null
++++ b/config/user_flags.mak.in
+@@ -0,0 +1,45 @@
++ ###########################################################################
++ ##                                                                       ##
++ ##                Centre for Speech Technology Research                  ##
++ ##                     University of Edinburgh, UK                       ##
++ ##                         Copyright (c) 1996                            ##
++ ##                        All Rights Reserved.                           ##
++ ##                                                                       ##
++ ##  Permission is hereby granted, free of charge, to use and distribute  ##
++ ##  this software and its documentation without restriction, including   ##
++ ##  without limitation the rights to use, copy, modify, merge, publish,  ##
++ ##  distribute, sublicense, and/or sell copies of this work, and to      ##
++ ##  permit persons to whom this work is furnished to do so, subject to   ##
++ ##  the following conditions:                                            ##
++ ##   1. The code must retain the above copyright notice, this list of    ##
++ ##      conditions and the following disclaimer.                         ##
++ ##   2. Any modifications must be clearly marked as such.                ##
++ ##   3. Original authors' names are not deleted.                         ##
++ ##   4. The authors' names are not used to endorse or promote products   ##
++ ##      derived from this software without specific prior written        ##
++ ##      permission.                                                      ##
++ ##                                                                       ##
++ ##  THE UNIVERSITY OF EDINBURGH AND THE CONTRIBUTORS TO THIS WORK        ##
++ ##  DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING      ##
++ ##  ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT   ##
++ ##  SHALL THE UNIVERSITY OF EDINBURGH NOR THE CONTRIBUTORS BE LIABLE     ##
++ ##  FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    ##
++ ##  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN   ##
++ ##  AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,          ##
++ ##  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF       ##
++ ##  THIS SOFTWARE.                                                       ##
++ ##                                                                       ##
++ ###########################################################################
++ ##                                                                       ##
++ ##                 Author: Sergio Oller <sergioller@gmail.com>           ##
++ ##                   Date: Jan 6 2014                                    ##
++ ## --------------------------------------------------------------------  ##
++ ## Settings for compiler defined via autoconf                            ##
++ ##                                                                       ##
++ ###########################################################################
++
++USER_CFLAGS    = @CFLAGS@
++USER_CXXFLAGS  = @CXXFLAGS@
++USER_LINKFLAGS = @LDFLAGS@
++
++
+--- a/config/Makefile
++++ b/config/Makefile
+@@ -40,7 +40,7 @@
+ FILES = Makefile ReadMe example.Makefile example.module.mak\
+ 	 common_make_rules test_make_rules vc_common_make_rules  \
+ 	config.in vc_config_make_rules-dist \
+-	project.mak system.sh make_system.mak
++	project.mak system.sh make_system.mak user_flags.mak
+ 
+ #LOCAL_CLEAN = modinclude*.inc system.mak
+ 
+--- a/config/config.in
++++ b/config/config.in
+@@ -203,6 +203,8 @@
+ 
+ include $(EST)/config/compilers/$(COMPILER).mak
+ 
++include $(EST)/config/user_flags.mak
++
+ ifneq ($(JAVA_COMPILER),none)
+     include $(EST)/config/compilers/$(JAVA_COMPILER).mak
+ endif
+--- a/config/rules/defaults.mak
++++ b/config/rules/defaults.mak
+@@ -164,13 +164,13 @@
+ ## Default C Compilation
+ 
+ ifndef	CC_COMMAND
+-    CC_COMMAND = $(CC) -c $(CFLAGS) $(COMPILE_CCFLAGS) $(DEFINES) $(INCLUDES)
++    CC_COMMAND = $(CC) -c $(CFLAGS) $(COMPILE_CCFLAGS) $(DEFINES) $(INCLUDES) $(USER_CFLAGS)
+ endif
+ 
+ ## Default C++ Compilation
+ 
+ ifndef CXX_COMMAND
+-    CXX_COMMAND = $(CXX) -c $(CXXFLAGS) $(COMPILE_CXXFLAGS) $(DEFINES) $(INCLUDES) $(TEMPLATES) 
++    CXX_COMMAND = $(CXX) -c $(CXXFLAGS) $(COMPILE_CXXFLAGS) $(DEFINES) $(INCLUDES) $(TEMPLATES) $(USER_CXXFLAGS)
+ endif
+ 
+ ## C++ for dynamic loading
+@@ -196,6 +196,6 @@
+ ## Link a program (not including libraries)
+ 
+ ifndef LINK_COMMAND
+-    LINK_COMMAND = $(CXX) $(LINKFLAGS) $(TEMPLATES) 
++    LINK_COMMAND = $(CXX) $(LINKFLAGS) $(TEMPLATES) $(USER_LINKFLAGS)
+ endif
+ 
+--- a/config/compilers/gcc_defaults.mak
++++ b/config/compilers/gcc_defaults.mak
+@@ -84,7 +84,7 @@
+ ifndef GCC_MAKE_SHARED_LIB
+ # Older versions of gcc might have required -fno-shared-data
+ #    MAKE_SHARED_LIB = $(CXX) -shared -fno-shared-data -o XXX
+-    MAKE_SHARED_LIB = $(CXX) -shared -o XXX -Wl,-soname -Wl,YYY
++    MAKE_SHARED_LIB = $(CXX) -shared -o XXX -Wl,-soname -Wl,YYY $(USER_LINKFLAGS)
+ else
+     MAKE_SHARED_LIB = $(GCC_MAKE_SHARED_LIB)
+ endif
+--- a/config/rules/test_make_rules.mak
++++ b/config/rules/test_make_rules.mak
+@@ -128,6 +128,6 @@
+ 
+ 
+ % : %.o $(PROJECT_LIBDEPS)
+-	$(CXX) $(CXXFLAGS) $(TEMPLATES) -o $@ $@.o $($(@:=_LIBS)) $(LIBS)
++	$(LINK_COMMAND) -o $@ $@.o $() $($(@:=_LIBS)) $(LIBS)
+ 
+ 

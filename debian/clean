@@ -1,0 +1,11 @@
+config.cache
+config.log
+config.status
+config/config
+config/modincludes.inc
+config/system.mak
+config/user_flags.mak
+doc/doxygen
+doc/man/*.dox
+lib/libestools.so*
+libestools.so

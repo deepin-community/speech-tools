@@ -1,0 +1,15 @@
+Applied-Upstream: https://github.com/festvox/speech_tools/commit/55bdddcca80906d63090872309c0a7838bf44f44
+---
+ siod/editline.c |    1 -
+ 1 file changed, 1 deletion(-)
+
+--- a/siod/editline.c
++++ b/siod/editline.c
+@@ -73,7 +73,6 @@
+ /* modified by awb to allow specifcation of history size at run time  */
+ /* (though only once)                                                 */
+ int editline_histsize=256;
+-char *editline_history_file;
+ /* If this is defined it'll be called for completion first, before the */
+ /* internal file name completion will be                               */
+ EL_USER_COMPLETION_FUNCTION_TYPE*el_user_completion_function = NULL;

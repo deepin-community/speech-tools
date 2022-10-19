@@ -1,0 +1,23 @@
+Description: make make test fail when the testsuite fails
+Author: Samuel Thibault <sthibault@debian.org>
+Applied-Upstream: https://github.com/festvox/speech_tools/pull/18
+
+
+---
+ testsuite/Makefile |    2 ++
+ 1 file changed, 2 insertions(+)
+
+--- a/testsuite/Makefile
++++ b/testsuite/Makefile
+@@ -103,9 +103,11 @@ just_test test:
+ 		echo "-------------" ;\
+ 		echo "Tests failed:" ;\
+ 		egrep 'FAILED|INCORRECT|Warning' .test_out ;\
++		false;\
+ 	else \
+ 		echo "-------------" ;\
+ 		echo "Test OK" ;\
++		true;\
+ 	fi
+ tmpdir:
+ 	rm -rf tmp

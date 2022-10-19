@@ -1,0 +1,80 @@
+Source: speech-tools
+Section: sound
+Priority: optional
+Maintainer: Debian Accessibility Team <pkg-a11y-devel@alioth-lists.debian.net>
+Uploaders: Jean-Philippe MENGUAL <texou@accelibreinfo.eu>, Kumar Appaiah <akumar@debian.org>, Paul Gevers <elbrus@debian.org>, Samuel Thibault <sthibault@debian.org>
+Build-Depends: debhelper-compat (= 12),
+               dh-exec,
+               gawk | awk,
+               libncurses-dev,
+               libpulse-dev,
+               libasound2-dev [linux-any],
+               xsltproc,
+               doxygen (>= 1.8.4),
+               doxygen-latex,
+               graphviz
+Standards-Version: 4.5.0
+Homepage: http://festvox.org/packed/festival/
+Vcs-Git: https://salsa.debian.org/tts-team/speech-tools.git
+Vcs-Browser: https://salsa.debian.org/tts-team/speech-tools
+Rules-Requires-Root: no
+
+Package: libestools2.5
+Architecture: any
+Multi-Arch: same
+Section: libs
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Description: Edinburgh Speech Tools Library
+ The Edinburgh Speech Tools Library is a collection of C++ class, functions and
+ related programs for manipulating the sorts of objects used in speech
+ processing.
+
+Package: libestools-dev
+Architecture: any
+Section: libdevel
+Depends: ${misc:Depends},
+         libc6-dev,
+         libestools2.5 (= ${binary:Version}),
+         libasound2-dev [linux-any],
+         libncurses-dev
+Conflicts: libestools2.1-dev
+Replaces: libestools2.1-dev
+Provides: libestools2.1-dev
+Suggests: speech-tools-doc
+Description: Edinburgh Speech Tools Library - developer's libraries
+ The Edinburgh Speech Tools Library is a collection of C++ class, functions and
+ related programs for manipulating the sorts of objects used in speech
+ processing.
+ .
+ This package contains the header files and static libraries.
+
+Package: speech-tools
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${perl:Depends}
+Suggests: speech-tools-doc
+Description: Edinburgh Speech Tools - user binaries
+ This package contains the various highly useful utility programs that use and
+ accompany the Edinburgh Speech Tools Library. Audio software and some basic
+ signal processing software is included in this package.
+ .
+ The following programs are available:
+ na_play: generic playback program for use with net_audio and CSTR ao.
+ ch_wave: Waveform file conversion program.
+ ch_lab: label file conversion program.
+ ch_track: Track file conversion program.
+ wagon: a CART tree build and test program
+ .
+ See /usr/share/doc/speech-tools/README for detail list of programs available.
+
+Package: speech-tools-doc
+Architecture: all
+Section: doc
+Depends: ${misc:Depends}, ${doxygen:Depends}, doc-base (>= 0.8.4)
+Built-Using: ${doxygen:Built-Using}
+Description: Documentation for the Edinburgh Speech Tools
+ This package contains the HTML and Postscript versions of the
+ documentation for the Edinburgh Speech Tools.
+ .
+ Documentation also contains examples and tutorials on how to use Speech
+ Tools library with your programs.

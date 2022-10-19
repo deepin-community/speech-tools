@@ -1,0 +1,16 @@
+Correct a spelling error flagged by lintian
+Author: Peter Drysdale <drysdalepete@gmail.com>
+Forwarded: https://github.com/festvox/speech_tools/pull/4
+Applied-Upstream: https://github.com/festvox/speech_tools/pull/4/commits/3d03c8ad98f0dad56e4064b70c5715b4f494fbfb
+
+--- a/siod/slib.cc
++++ b/siod/slib.cc
+@@ -626,7 +626,7 @@
+ void err_stack(char *ptr)
+      /* The user could be given an option to continue here */
+ {(void)ptr;
+- err("the currently assigned stack limit has been exceded",NIL);}
++ err("the currently assigned stack limit has been exceeded",NIL);}
+ 
+ LISP stack_limit(LISP amount,LISP silent)
+ {if NNULLP(amount)

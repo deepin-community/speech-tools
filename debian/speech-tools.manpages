@@ -1,0 +1,7 @@
+debian/manpages/ch_lab.1
+debian/manpages/ch_track.1
+debian/manpages/ch_utt.1
+debian/manpages/ch_wave.1
+debian/manpages/na_play.1
+debian/manpages/na_record.1
+debian/manpages/speech-tools.1

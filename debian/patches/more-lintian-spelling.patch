@@ -1,0 +1,174 @@
+Description: Lintian reports typos
+Author: Paul Gevers <elbrus@debian.org>
+Forwarded: https://github.com/festvox/speech_tools/pull/4
+Applied-Upstream: https://github.com/festvox/speech_tools/pull/4/commits/3d03c8ad98f0dad56e4064b70c5715b4f494fbfb
+
+---
+ base_class/EST_TMatrix.cc             |    4 ++--
+ doc/estexec.md                        |    2 +-
+ grammar/ngram/EST_PST.cc              |    2 +-
+ lib/est_mainline-in                   |    2 +-
+ ling_class/EST_relation_compare.cc    |    2 +-
+ main/bcat_main.cc                     |    2 +-
+ main/sig2fv_main.cc                   |    8 ++++----
+ main/tilt_analysis_main.cc            |    2 +-
+ main/wagon_main.cc                    |    2 +-
+ speech_class/EST_track_aux.cc         |    2 +-
+ speech_class/EST_wave_io.cc           |    2 +-
+ testsuite/correct/ch_track_script.out |    2 +-
+ 12 files changed, 16 insertions(+), 16 deletions(-)
+
+--- a/ling_class/EST_relation_compare.cc
++++ b/ling_class/EST_relation_compare.cc
+@@ -483,7 +483,7 @@ EST_FMatrix matrix_compare(EST_Relation
+ 		    else if (method == 2)
+ 			m(i, j) = label_distance2(*r_ptr, *t_ptr);
+ 		    else
+-			cerr << "Unknown comparision method" << method << endl;
++			cerr << "Unknown comparison method" << method << endl;
+ 		    ++j;
+ 		}
+ 	    ++i;
+--- a/speech_class/EST_track_aux.cc
++++ b/speech_class/EST_track_aux.cc
+@@ -1064,7 +1064,7 @@ EST_String options_track_input(void)
+         "-startt <float>  Time of first frame, for formats which don't provide this\n\n"
+ 	"-c <string>      Select a subset of channels (starts from 0). \n"
+ 	"                 Tracks can have multiple channels. This option \n"
+-        "                 specifies a list of numbers, refering to the channel \n"
++        "                 specifies a list of numbers, referring to the channel \n"
+ 	"                 numbers which are to be used for for processing. \n\n"+
+ 	options_subtrack();
+ }
+--- a/speech_class/EST_wave_io.cc
++++ b/speech_class/EST_wave_io.cc
+@@ -1673,7 +1673,7 @@ enum EST_read_status load_wave_raw(EST_T
+ 	/* Guess the size */
+ 	if ((offset != 0) || (length != 0))
+ 	{
+-	    fprintf(stderr,"Load ascii wave: doesn't support offets and lengths\n");
++	    fprintf(stderr,"Load ascii wave: doesn't support offsets and lengths\n");
+ 	    return misc_read_error;
+ 	}
+ 	
+--- a/base_class/EST_TMatrix.cc
++++ b/base_class/EST_TMatrix.cc
+@@ -167,7 +167,7 @@ template<class T>
+ EST_TMatrix<T> &EST_TMatrix<T>::add_rows(const EST_TMatrix<T> &in)
+ {
+   if (in.num_columns() != num_columns())
+-    EST_error("Can't add rows with differnet number of columns (%d vs %d)",
++    EST_error("Can't add rows with different number of columns (%d vs %d)",
+ 	      in.num_columns(),
+ 	      num_columns()
+ 	      );
+@@ -188,7 +188,7 @@ template<class T>
+ EST_TMatrix<T> &EST_TMatrix<T>::add_columns(const EST_TMatrix<T> &in)
+ {
+   if (in.num_rows() != num_rows())
+-    EST_error("Can't add columns with differnet number of rows (%d vs %d)",
++    EST_error("Can't add columns with different number of rows (%d vs %d)",
+ 	      in.num_rows(),
+ 	      num_rows()
+ 	      );
+--- a/doc/estexec.md
++++ b/doc/estexec.md
+@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
+         (argc, argv, 
+          EST_String("[OPTIONS] [files...]\n")+
+          "Summary; DO SOMETHING\n"+
+-         "-o [ofile]       Ouptut file\n",
++         "-o [ofile]       Output file\n",
+          files, cmd_line);
+ 
+     EST_String out_file; // the name of the output file
+--- a/grammar/ngram/EST_PST.cc
++++ b/grammar/ngram/EST_PST.cc
+@@ -192,7 +192,7 @@ EST_PredictionSuffixTree::accumulate(con
+     */
+ 
+     if (words.n()+index < p_order)
+-	cerr << "EST_PredictionSuffixTree: accumlating window is wtoo small"
++	cerr << "EST_PredictionSuffixTree: accumulating window is too small"
+ 	     << endl;
+     else
+     {
+--- a/lib/est_mainline-in
++++ b/lib/est_mainline-in
+@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
+ 	(argc, argv, 
+ 	 EST_String("[OPTIONS] [files...]\n")+
+ 	 "Summary; <<DO SOMETHING>>\n"+
+-	 "-o <ofile>       Ouptut file\n",
++	 "-o <ofile>       Output file\n",
+ 	 files, cmd_line);
+ 
+     EST_String out_file;
+--- a/main/bcat_main.cc
++++ b/main/bcat_main.cc
+@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
+ 	(argc, argv, 
+ 	 EST_String("-o [ofile] [files...]\n")+
+ 	 "Summary; concatenate files in binary mode\n"+
+-	 "-o <ofile>       Ouptut file of binary data\n",
++	 "-o <ofile>       Output file of binary data\n",
+ 	 files, cmd_line);
+ 
+     EST_String out_file;
+--- a/main/sig2fv_main.cc
++++ b/main/sig2fv_main.cc
+@@ -175,17 +175,17 @@ int main(int argc, char *argv[])
+          "    each the pms.\n\n"
+ 
+ 	 "-coefs <string> list of basic types of processing required. \n"
+-	 "    Permissable types are: \n" + sigpr_options_supported()+" \n"
++	 "    Permissible types are: \n" + sigpr_options_supported()+" \n"
+ 	 "-delta <string> list of delta types of processing required. Basic \n"
+ 	 "    processing does not need to be specified for this option to work. \n"
+-	 "    Permissable types are: \n" + sigpr_options_supported()+" \n"
++	 "    Permissible types are: \n" + sigpr_options_supported()+" \n"
+ 	 "-acc <string>  list of acceleration (delta delta) processing \n"
+ 	 "    required. Basic processing does not need to be specified for \n"
+          "    this option to work. \n" 
+-	 "    Permissable types are: \n" 
++	 "    Permissible types are: \n" 
+ 	 + sigpr_options_supported()+"\n"
+ 	 "-window_type <string> Type of window used on waveform. \n"
+-	 "    Permissable types are: \n" +
++	 "    Permissible types are: \n" +
+ 	 EST_Window::options_supported() + 
+ 	 "    default: \"DEFAULT_WINDOW\"\n\n"
+ 	 "-lpc_order <int>      Order of lpc analysis. \n\n"
+--- a/main/wagon_main.cc
++++ b/main/wagon_main.cc
+@@ -218,7 +218,7 @@ static int wagon_main(int argc, char **a
+ 	 "-balance <float>  For derived stop size, if dataset at node, divided\n"+
+ 	 "                  by balance is greater than stop it is used as stop\n"+
+ 	 "                  if balance is 0 (default) always use stop as is.\n"+
+-         "-cos              Use mean cosine distance rather than gausian (TBD).\n"+
++         "-cos              Use mean cosine distance rather than Gaussian (TBD).\n"+
+          "-dof <float>      Randomly dropout feats in training (prob).\n"+
+          "-dos <float>      Randomly dropout samples in training (prob).\n"+
+          "-vertex_output <string> Output <mean> or <best> of cluster\n"+
+--- a/main/tilt_analysis_main.cc
++++ b/main/tilt_analysis_main.cc
+@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
+ 	 "     label end time the search region should be. Typical value, 0.1 \n\n"
+ 	 "-range  <float>   Range of RFC search region. In addition to \n" 
+ 	 "     the limit, the range defines the limits of the rfc matching \n" 
+-	 "     search region as a  percentage of the overal input label \n"
++	 "     search region as a  percentage of the overall input label \n"
+ 	 "     duration. Typical value, 0.25 (the search region is the first and \n"
+ 	 "     last 25% of the label) \n\n"
+ 	 "-smooth                  Smooth and Interpolate input F0 contour. \n"
+--- a/testsuite/correct/ch_track_script.out
++++ b/testsuite/correct/ch_track_script.out
+@@ -37,7 +37,7 @@ use "-" to make input and output files s
+ 
+ -c <string>      Select a subset of channels (starts from 0). 
+                  Tracks can have multiple channels. This option 
+-                 specifies a list of numbers, refering to the channel 
++                 specifies a list of numbers, referring to the channel 
+                  numbers which are to be used for for processing. 
+ 
+ -start <float>   Extract track starting at this time, 

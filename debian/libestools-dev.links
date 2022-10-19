@@ -1,0 +1,11 @@
+#! /usr/bin/dh-exec
+# Festival related evil
+usr/include/speech_tools    usr/lib/speech_tools/include
+usr/lib/${DEB_HOST_MULTIARCH}/libestbase.so     usr/lib/speech_tools/lib/libestbase.so
+usr/lib/${DEB_HOST_MULTIARCH}/libestbase.a      usr/lib/speech_tools/lib/libestbase.a
+usr/lib/${DEB_HOST_MULTIARCH}/libeststring.so   usr/lib/speech_tools/lib/libeststring.so
+usr/lib/${DEB_HOST_MULTIARCH}/libeststring.a    usr/lib/speech_tools/lib/libeststring.a
+usr/lib/${DEB_HOST_MULTIARCH}/libestools.so     usr/lib/speech_tools/lib/libestools.so
+usr/lib/${DEB_HOST_MULTIARCH}/libestools.a      usr/lib/speech_tools/lib/libestools.a
+# Compatibility with past packages
+usr/include/speech_tools    usr/include/estools

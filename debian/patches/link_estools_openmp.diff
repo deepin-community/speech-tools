@@ -1,0 +1,19 @@
+This patch adds OpenMP flags to the command used to link the shared library.
+OpenMP is used by the wagon tool since speech-tools-2.5. It is used in the libestools
+shared library. dpkg-shlibdeps reports missing OpenMP symbols if the shared library is not
+linked with OpenMP options.
+
+Author: Sergio Oller <sergioller@gmail.com>
+Last update: 2018-06-30
+Applied-Upstream: https://github.com/festvox/speech_tools/pull/9
+--- a/config/compilers/gcc_defaults.mak
++++ b/config/compilers/gcc_defaults.mak
+@@ -84,7 +84,7 @@
+ ifndef GCC_MAKE_SHARED_LIB
+ # Older versions of gcc might have required -fno-shared-data
+ #    MAKE_SHARED_LIB = $(CXX) -shared -fno-shared-data -o XXX
+-    MAKE_SHARED_LIB = $(CXX) -shared -o XXX -Wl,-soname -Wl,YYY $(USER_LINKFLAGS)
++    MAKE_SHARED_LIB = $(CXX) $(OMP_OPTS) -shared -o XXX -Wl,-soname -Wl,YYY $(USER_LINKFLAGS)
+ else
+     MAKE_SHARED_LIB = $(GCC_MAKE_SHARED_LIB)
+ endif

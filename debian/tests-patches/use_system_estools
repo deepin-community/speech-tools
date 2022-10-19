@@ -1,0 +1,101 @@
+---
+ testsuite/ch_track.sh |    2 +-
+ testsuite/ch_wave.sh  |    8 ++++----
+ testsuite/lpc.sh      |    8 ++++----
+ testsuite/tilt.sh     |    8 ++++----
+ testsuite/viterbi.sh  |    2 +-
+ testsuite/wagon.sh    |    2 +-
+ 6 files changed, 15 insertions(+), 15 deletions(-)
+
+--- a/testsuite/ch_track.sh
++++ b/testsuite/ch_track.sh
+@@ -32,7 +32,7 @@
+ ##                                                                       ##
+ ###########################################################################
+ 
+-CH_TRACK=$TOP/bin/ch_track
++CH_TRACK=/usr/bin/ch_track
+ DATA=../lib/example_data
+ 
+ set -x
+--- a/testsuite/ch_wave.sh
++++ b/testsuite/ch_wave.sh
+@@ -32,8 +32,8 @@
+ ##                                                                       ##
+ ###########################################################################
+ 
+-CH_WAVE=$TOP/bin/ch_wave
+-BCAT=$TOP/bin/bcat
++CH_WAVE=/usr/bin/ch_wave
++BCAT=/usr/bin/bcat
+ 
+ test_conversion () {
+ 	type=$1
+@@ -173,9 +173,9 @@ test_defft ()
+ test_keylab()
+ {
+   echo keylab divide and extract >&2
+-  (cd tmp; ../$CH_WAVE -divide -key "$DATA"/key.lab "$DATA"/ch_wave.wav -otype nist -ext .wav)
++  (cd tmp; $CH_WAVE -divide -key "$DATA"/key.lab "$DATA"/ch_wave.wav -otype nist -ext .wav)
+   $CH_WAVE -info tmp/w*.wav
+-  (cd tmp; ../$CH_WAVE -extract w2 -key  "$DATA"/key.lab "$DATA"/ch_wave.wav -otype nist -o w2.w2)
++  (cd tmp; $CH_WAVE -extract w2 -key  "$DATA"/key.lab "$DATA"/ch_wave.wav -otype nist -o w2.w2)
+   if cmp tmp/w2.wav tmp/w2.w2
+      then echo ch_wave key extract : pass
+      else echo ch_wave ket extract : fail
+--- a/testsuite/lpc.sh
++++ b/testsuite/lpc.sh
+@@ -31,10 +31,10 @@
+ ##  THIS SOFTWARE.                                                       ##
+ ##                                                                       ##
+ ###########################################################################
+-SIG2FV=$TOP/bin/sig2fv
+-SIGFILTER=$TOP/bin/sigfilter
+-CH_TRACK=$TOP/bin/ch_track
+-CH_WAVE=$TOP/bin/ch_wave
++SIG2FV=/usr/bin/sig2fv
++SIGFILTER=/usr/bin/sigfilter
++CH_TRACK=/usr/bin/ch_track
++CH_WAVE=/usr/bin/ch_wave
+ 
+ DATA=$TOP/lib/example_data
+ 
+--- a/testsuite/tilt.sh
++++ b/testsuite/tilt.sh
+@@ -31,10 +31,10 @@
+ ##  THIS SOFTWARE.                                                       ##
+ ##                                                                       ##
+ ###########################################################################
+-PDA=$TOP/bin/pda
+-TILT_ANALYSIS=$TOP/bin/tilt_analysis
+-TILT_SYNTHESIS=$TOP/bin/tilt_synthesis
+-CH_TRACK=$TOP/bin/ch_track
++PDA=/usr/bin/pda
++TILT_ANALYSIS=/usr/bin/tilt_analysis
++TILT_SYNTHESIS=/usr/bin/tilt_synthesis
++CH_TRACK=/usr/bin/ch_track
+ 
+ DATA=$TOP/lib/example_data
+ 
+--- a/testsuite/viterbi.sh
++++ b/testsuite/viterbi.sh
+@@ -32,7 +32,7 @@
+ ##                                                                       ##
+ ###########################################################################
+ 
+-$TOP/bin/viterbi -ngram "$DATA/vit.B.ngram" \
++/usr/bin/viterbi -ngram "$DATA/vit.B.ngram" \
+ 	"$DATA/vit.observes" \
+ 	-vocab "$DATA/vit.vocab" \
+ 	-prev_tag B \
+--- a/testsuite/wagon.sh
++++ b/testsuite/wagon.sh
+@@ -32,7 +32,7 @@
+ ##                                                                       ##
+ ###########################################################################
+ 
+-WAGON=$TOP/bin/wagon
++WAGON=/usr/bin/wagon
+ 
+ DATA=../lib/example_data
+ 

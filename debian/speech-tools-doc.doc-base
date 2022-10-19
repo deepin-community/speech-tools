@@ -1,0 +1,9 @@
+Document: speech-tools-doc
+Title: Documentation for Edinburgh speech-tools
+Abstract: This documents provides user manual and tutorial for Edinburgh
+ speech-tools
+Section: Help
+
+Format: HTML
+Index: /usr/share/doc/speech-tools-doc/doc/index.html
+Files: /usr/share/doc/speech-tools-doc/doc/*.html

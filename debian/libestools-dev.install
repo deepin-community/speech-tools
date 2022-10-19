@@ -1,0 +1,16 @@
+#! /usr/bin/dh-exec
+include/*.h             usr/include/speech_tools/
+include/unix/*.h        usr/include/speech_tools/unix/
+lib/*.a                 usr/lib/${DEB_HOST_MULTIARCH}
+lib/*.so                usr/lib/${DEB_HOST_MULTIARCH}
+# Note: these are possibly internal headers (C++ lossage)
+base_class/*.cc         usr/include/speech_tools/base_class/
+base_class/*.h          usr/include/speech_tools/
+include/instantiate/*.h usr/include/speech_tools/instantiate/
+include/ling_class/*.h  usr/include/speech_tools/ling_class/
+include/rxp/*.h         usr/include/speech_tools/rxp/
+include/sigpr/*.h       usr/include/speech_tools/sigpr/
+# Needed to compile things against speech_tools
+config                  usr/lib/speech_tools/
+lib/siod/*.scm          usr/lib/speech_tools/lib/siod/
+make.include            usr/lib/speech_tools/
