@@ -1,3 +1,9 @@
+speech-tools (1:2.5.0-12deepin0) unstable; urgency=medium
+
+  * No source change upload against GCC 12.
+
+ -- Tianyu Chen <sweetyfish@deepin.org>  Fri, 20 Sep 2024 12:19:10 +0800
+
 speech-tools (1:2.5.0-12) unstable; urgency=medium
 
   * rules: Drop ddeb-migration rules, now useless
